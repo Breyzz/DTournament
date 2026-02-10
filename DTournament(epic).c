@@ -10,7 +10,7 @@ struct Pengguna {
     char password[50];
     char namaLengkap[50];
     char prestasi[200]; // mungkin tidak usah? tapi gpp untuk disimpan saja
-    int saldo;
+    int saldo; // dihapus
     int isKetuaTim; // nama diganti untuk merefleksikan 1 = ketua tim, 0 = player biasa
 } userAktif;
 
@@ -30,7 +30,7 @@ struct Tim {
     char namaTim[50];
     char idPemain[5][50];
     int idTurnamen;
-    int isApproved;
+    int isApproved; // nanti dihapus
     int skor;
 };
 
@@ -51,7 +51,7 @@ void LoginUser();
 void RegistrasiUser();
 void MenuAdmin();
 void BuatTurnamen();
-void LihatListTurnamenAdmin();
+void LihatListTurnamenAdmin(); // sama kayak list user
 void SortirPrizePool();
 void PengaturanTurnamen();
 void ManajemenTimDanSkor();
@@ -64,8 +64,8 @@ void TopUpSaldo();
 void DaftarTurnamen();
 void LihatListTim();
 void LihatProgresBracket();
-void TambahKomentar();
-void LihatKomentar();
+void TambahKomentar(); // dihapus
+void LihatKomentar(); // dihapus
 void SearchingTim();
 void LihatListTurnamenUser();
 void clearScreen();
