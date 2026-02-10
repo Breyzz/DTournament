@@ -65,16 +65,12 @@ void DaftarTurnamen();
 void LihatListTim();
 void LihatProgresBracket();
 void TambahKomentar();
+void LihatKomentar();
 void SearchingTim();
 void LihatListTurnamenUser();
 void clearScreen();
 void pause();
 void getStringInput(char *buffer, int size);
-
-int main() {
-    MenuLogin();
-    return 0;
-}
 
 void clearScreen() {
     printf("\033[2J\033[1;1H"); // ANSI escape code https://apple.stackexchange.com/questions/72291/clear-output-screen-from-c-program
@@ -90,6 +86,12 @@ void getStringInput(char *buffer, int size) {
     fgets(buffer, size, stdin);
     buffer[strcspn(buffer, "\n")] = '\0';
 }
+
+int main() {
+    MenuLogin();
+    return 0;
+}
+
 
 void MenuLogin() {
     int pilihan;
@@ -817,7 +819,8 @@ void MenuUser() {
         printf("7. Lihat Progres & Bracket\n");
         printf("8. Tambah Komentar\n");
         printf("9. Searching Tim\n");
-        printf("10. Logout\n");
+        printf("10. Lihat Komentar\n");
+        printf("11. Logout\n");
         printf("\nPilihan: ");
         scanf("%d", &pilihan); getchar();
 
@@ -850,6 +853,9 @@ void MenuUser() {
                 SearchingTim();
                 break;
             case 10:
+                LihatKomentar();
+                break;
+            case 11:
                 return;
             default:
                 printf("\nPilihan tidak valid!\n");
@@ -1232,6 +1238,66 @@ void TambahKomentar() {
     } else {
         printf("\nID Tournament tidak ditemukan!\n");
     }
+    pause();
+}
+
+void LihatKomentar() {
+    int idTournament;
+
+    clearScreen();
+    printf("====================================\n");
+    printf("=       LIHAT KOMENTAR             =\n");
+    printf("====================================\n\n");
+
+    fturnamen = fopen("tournaments.dat", "rb");
+    if(fturnamen == NULL) {
+        printf("\nBelum ada tournament tersedia.\n");
+        pause();
+        return;
+    }
+
+    printf("Daftar Tournament:\n");
+    printf("%-5s %-30s\n", "ID", "Nama Tournament");
+    printf("========================================\n");
+
+    struct Turnamen temp;
+    while(fread(&temp, sizeof(struct Turnamen), 1, fturnamen) == 1) {
+        printf("%-5d %-30s\n", temp.id, temp.namaTurnamen);
+    }
+    fclose(fturnamen);
+
+    printf("\nMasukkan ID Tournament: ");
+    scanf("%d", &idTournament); getchar();
+
+    fkomentar = fopen("comments.dat", "rb");
+    if(fkomentar == NULL) {
+        printf("\nBelum ada komentar tersimpan.\n");
+        pause();
+        return;
+    }
+
+    clearScreen();
+    printf("====================================\n");
+    printf("=   KOMENTAR TOURNAMENT ID: %d     =\n", idTournament);
+    printf("====================================\n\n");
+
+    struct Komentar tempKomen;
+    int count = 0;
+
+    while(fread(&tempKomen, sizeof(struct Komentar), 1, fkomentar) == 1) {
+        if(tempKomen.idTurnamen == idTournament) {
+            printf("[%d] %s:\n", ++count, tempKomen.username);
+            printf("    \"%s\"\n\n", tempKomen.isiKomentar);
+        }
+    }
+    fclose(fkomentar);
+
+    if(count == 0) {
+        printf("Belum ada komentar untuk tournament ini.\n");
+    } else {
+        printf("Total: %d komentar\n", count);
+    }
+
     pause();
 }
 
